@@ -1,4 +1,5 @@
 import cv2
+import os
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
@@ -18,6 +19,9 @@ def predict_emotion(image_path):
         return "sad"
 
 # Использование:
-image_path = 'test_images/image.jpg'
-emotion = predict_emotion(image_path)
-print(f"Эмоция на этом изображении: {emotion}")
+image_path_dir = 'test_images'
+for image_file in os.listdir(image_path_dir):
+    image_path = os.path.join(image_path_dir, image_file)
+    if os.path.isfile(image_path):
+        emotion = predict_emotion(image_path)
+        print(f"Эмоция на изображении {image_file}: {emotion}")

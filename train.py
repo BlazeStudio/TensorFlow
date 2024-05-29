@@ -76,7 +76,7 @@ model.summary()
 from keras.callbacks import EarlyStopping
 earlystop = EarlyStopping(patience=10)
 
-hist = model.fit(train_ds, epochs=50, validation_data=val_ds, callbacks=[earlystop])
+hist = model.fit(train_ds, epochs=8, validation_data=val_ds, callbacks=[earlystop])
 
 # Plot accuracy
 fig = plt.figure()
