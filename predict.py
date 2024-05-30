@@ -1,27 +1,31 @@
-import cv2
 import os
-import tensorflow as tf
-from tensorflow import keras
+import cv2
 import numpy as np
+from tensorflow import keras
 
-model = keras.models.load_model('face-predict.keras')
 
-def predict_emotion(image_path):
-    img = cv2.imread(image_path)
-    img = cv2.resize(img, (256, 256))
-    img = img / 255.0  # Normalize
-    img = np.expand_dims(img, axis=0)  # Add batch dimension
+CATEGORIES = ['daytime', 'nighttime', 'sunrise']
+IMG_SIZE = 224
 
-    prediction = model.predict(img)
-    if prediction >= 0.5:
-        return "happy"
+# Функция для предобработки и предсказания новых изображений
+def image(path):
+    img = cv2.imread(path)
+    if img is None:
+        print('Wrong path:', path)
     else:
-        return "sad"
+        img = cv2.resize(img, (IMG_SIZE, IMG_SIZE))
+        img = img / 255.0
+        img = np.expand_dims(img, axis=0)
+        return img
 
-# Использование:
-image_path_dir = 'test_images'
+# Загрузка модели
+model = keras.models.load_model('time_of_day_classifier.keras')
+
+# Предсказание на новых изображениях
+image_path_dir = 'time_test'
 for image_file in os.listdir(image_path_dir):
     image_path = os.path.join(image_path_dir, image_file)
     if os.path.isfile(image_path):
-        emotion = predict_emotion(image_path)
-        print(f"Эмоция на изображении {image_file}: {emotion}")
+        img = image(image_path)
+        prediction = model.predict(img)
+        print(f"This image {image_file}: {CATEGORIES[np.argmax(prediction)]}")
