@@ -6,7 +6,6 @@ import random
 import pickle
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Rescaling
-from keras.callbacks import TensorBoard
 import time
 
 # Определение констант
